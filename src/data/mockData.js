@@ -76,16 +76,16 @@ export const educationCards = [
 
 export const locationLeaderboard = {
   week: [
-    { rank: 1, name: "Community Eco Bin Station", area: "Community Center", entries: 186, weight: 42.8, image: "station-community.svg", change: "+18%" },
-    { rank: 2, name: "Market Recycling Wall", area: "Local Market", entries: 154, weight: 35.6, image: "station-market.svg", change: "+11%" },
-    { rank: 3, name: "Municipal Bulky Waste Bay", area: "Service Road B", entries: 112, weight: 31.4, image: "station-bulky.svg", change: "+6%" },
+    { rank: 1, name: "Community Eco Bin Station", shortName: "Community Eco Bin", area: "Community Center", entries: 186, weight: 42.8, image: "station-community.svg", change: "+18%" },
+    { rank: 2, name: "Market Recycling Wall", shortName: "Market Recycling Wall", area: "Local Market", entries: 154, weight: 35.6, image: "station-market.svg", change: "+11%" },
+    { rank: 3, name: "Municipal Bulky Waste Bay", shortName: "Municipal Bulky Bay", area: "Service Road B", entries: 112, weight: 31.4, image: "station-bulky.svg", change: "+6%" },
     { rank: 4, name: "Riverside Drop-off Point", area: "Riverside Walk", entries: 89, weight: 18.7, image: "station-community.svg", change: "+4%" },
     { rank: 5, name: "North Park Collection Hub", area: "North Park", entries: 76, weight: 16.2, image: "station-market.svg", change: "+2%" },
   ],
   month: [
-    { rank: 1, name: "Market Recycling Wall", area: "Local Market", entries: 692, weight: 158.4, image: "station-market.svg", change: "+22%" },
-    { rank: 2, name: "Community Eco Bin Station", area: "Community Center", entries: 648, weight: 147.2, image: "station-community.svg", change: "+19%" },
-    { rank: 3, name: "Municipal Bulky Waste Bay", area: "Service Road B", entries: 401, weight: 110.3, image: "station-bulky.svg", change: "+9%" },
+    { rank: 1, name: "Market Recycling Wall", shortName: "Market Recycling Wall", area: "Local Market", entries: 692, weight: 158.4, image: "station-market.svg", change: "+22%" },
+    { rank: 2, name: "Community Eco Bin Station", shortName: "Community Eco Bin", area: "Community Center", entries: 648, weight: 147.2, image: "station-community.svg", change: "+19%" },
+    { rank: 3, name: "Municipal Bulky Waste Bay", shortName: "Municipal Bulky Bay", area: "Service Road B", entries: 401, weight: 110.3, image: "station-bulky.svg", change: "+9%" },
     { rank: 4, name: "Riverside Drop-off Point", area: "Riverside Walk", entries: 346, weight: 74.5, image: "station-community.svg", change: "+6%" },
     { rank: 5, name: "North Park Collection Hub", area: "North Park", entries: 301, weight: 67.8, image: "station-market.svg", change: "+3%" },
   ],

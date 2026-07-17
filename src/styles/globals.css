@@ -18,6 +18,7 @@ html {
 body {
   margin: 0;
   min-width: 320px;
+  overflow-x: hidden;
   background: var(--app-bg);
   color: #17201a;
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
@@ -42,9 +43,11 @@ select {
 }
 
 .phone-shell {
+  width: 100%;
   min-height: 100vh;
   max-width: 480px;
   margin: 0 auto;
+  overflow-x: clip;
   background: #f8fbf8;
   box-shadow: 0 0 0 1px rgba(21, 128, 61, 0.08);
 }

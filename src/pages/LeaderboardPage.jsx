@@ -10,12 +10,12 @@ const baseUrl = import.meta.env.BASE_URL;
 
 function PodiumStation({ location, position, featured }) {
   return (
-    <div className={`flex min-w-0 flex-col items-center text-center ${featured ? "-translate-y-2" : ""}`}>
+    <div className={`flex w-full min-w-0 flex-col items-center text-center ${featured ? "-translate-y-2" : ""}`}>
       <div className={`relative grid place-items-center rounded-full bg-white ring-2 ${featured ? "size-20 ring-eco-500 shadow-soft" : "size-14 ring-eco-200"}`}>
         {featured ? <Crown className="absolute -top-5 size-6 text-amber-500" /> : <span className="absolute -top-4 grid size-5 place-items-center rounded-full bg-eco-700 text-[10px] font-black text-white">{position}</span>}
-        <img src={`${baseUrl}${location.image}`} alt="" className={`${featured ? "size-15" : "size-11"} rounded-full object-cover`} />
+        <img src={`${baseUrl}${location.image}`} alt="" className={`${featured ? "size-[4.5rem]" : "size-11"} max-w-full rounded-full object-cover`} />
       </div>
-      <p className="mt-2 line-clamp-2 min-h-9 rounded-md bg-white/10 px-1.5 py-0.5 text-xs font-black leading-4 text-white">{location.name}</p>
+      <p className="mt-2 flex min-h-9 w-full items-center justify-center break-words rounded-md bg-white/10 px-1 py-0.5 text-[0.68rem] font-black leading-4 text-white">{location.shortName || location.name}</p>
       <p className="mt-1 text-xs font-bold text-eco-100">{location.entries} items</p>
     </div>
   );
@@ -31,7 +31,7 @@ export default function LeaderboardPage() {
   const topThree = [locations[1], locations[0], locations[2]];
 
   return (
-    <div className="animate-rise pb-1">
+    <div className="max-w-full overflow-x-hidden pb-1 animate-rise">
       <PageHeader
         eyebrow="Location impact"
         title="Plastic recovery by location"
@@ -70,7 +70,7 @@ export default function LeaderboardPage() {
         </div>
       </Card>
 
-      <section className="mb-5 rounded-lg bg-eco-800 px-4 pb-4 pt-6 shadow-soft" aria-label="Top recycling locations">
+      <section className="mb-5 max-w-full overflow-hidden rounded-lg bg-eco-800 px-3 pb-4 pt-6 shadow-soft" aria-label="Top recycling locations">
         <div className="mb-5 flex items-center justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-wide text-eco-200">Top locations</p>
@@ -78,7 +78,7 @@ export default function LeaderboardPage() {
           </div>
           <Medal className="size-6 text-amber-300" />
         </div>
-        <div className="grid grid-cols-3 items-end gap-2">
+        <div className="grid grid-cols-3 items-end gap-1.5">
           <PodiumStation location={topThree[0]} position={2} />
           <PodiumStation location={topThree[1]} position={1} featured />
           <PodiumStation location={topThree[2]} position={3} />

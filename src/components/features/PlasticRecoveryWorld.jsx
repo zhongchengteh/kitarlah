@@ -92,6 +92,7 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
     if (!current) return;
     const nextZoom = clamp(current.targetZoom + amount, 3.55, 6.1);
     current.targetZoom = nextZoom;
+    current.userAdjustedZoom = true;
     setZoom(nextZoom);
   };
 
@@ -118,7 +119,8 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
     const scene = new THREE.Scene();
     scene.background = new THREE.Color("#f6fbf5");
     const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 100);
-    camera.position.set(0, 1.9, 4.65);
+    const initialZoom = mount.clientWidth < 380 ? 5.45 : mount.clientWidth < 440 ? 5.15 : 4.85;
+    camera.position.set(0, initialZoom * 0.409, initialZoom);
     camera.lookAt(0, 0.22, 0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -130,7 +132,7 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
     scene.add(sun);
 
     const world = new THREE.Group();
-    const worldBaseY = 0.38;
+    const worldBaseY = 0.56;
     world.position.y = worldBaseY;
     scene.add(world);
     const soil = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.22, 0.36, 36), makeMaterial("#4a5b3b"));
@@ -190,18 +192,25 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
     renderer.domElement.addEventListener("pointercancel", onPointerUp);
     renderer.domElement.addEventListener("wheel", onWheel, { passive: false });
 
+    sceneRef.current = { camera, world, trees, plants, plastic, beacon, waterMaterial, targetZoom: initialZoom, targetPan: 0, userAdjustedZoom: false, renderedItems: verifiedItems, recovery: recovery.progress };
+
     const resize = () => {
       const width = Math.max(mount.clientWidth, 1);
       const height = Math.max(mount.clientHeight, 1);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height, false);
+      const current = sceneRef.current;
+      if (current && !current.userAdjustedZoom) {
+        const fittedZoom = width < 380 ? 5.45 : width < 440 ? 5.15 : 4.85;
+        current.targetZoom = fittedZoom;
+        setZoom(fittedZoom);
+      }
     };
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(mount);
     resize();
 
-    sceneRef.current = { camera, world, trees, plants, plastic, beacon, waterMaterial, targetZoom: 4.65, targetPan: 0, renderedItems: verifiedItems, recovery: recovery.progress };
     let frameId = 0;
     const animate = (time) => {
       const current = sceneRef.current;
