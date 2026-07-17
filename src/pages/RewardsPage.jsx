@@ -1,6 +1,7 @@
-import { Gift } from "lucide-react";
+import { Gift, LockKeyhole, Sparkles, Star } from "lucide-react";
 import { useState } from "react";
 import PageHeader from "../components/layout/PageHeader.jsx";
+import DailyQuestCard from "../components/features/DailyQuestCard.jsx";
 import Badge from "../components/ui/Badge.jsx";
 import Button from "../components/ui/Button.jsx";
 import Card from "../components/ui/Card.jsx";
@@ -15,21 +16,23 @@ export default function RewardsPage() {
 
   return (
     <div className="animate-rise">
-      <PageHeader eyebrow="Rewards" title="Redeem points" description="Motivate recycling with simple community rewards." />
-      <Card variant="elevated" className="mb-4">
+      <PageHeader eyebrow="Reward vault" title="Unlock good habits" description="Small rewards celebrate verified recovery, not replace it." />
+      <Card variant="elevated" className="mb-4 overflow-hidden !bg-eco-800 !text-white">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-semibold text-slate-500">Available points</p>
-            <p className="text-3xl font-black text-eco-800">{stats.points}</p>
+            <p className="text-sm font-semibold text-eco-100">Leaf points collected</p>
+            <p className="text-3xl font-black text-white">{stats.points}</p>
           </div>
-          <span className="grid size-12 place-items-center rounded-lg bg-eco-100 text-eco-800">
+          <span className="grid size-12 place-items-center rounded-lg bg-white/15 text-amber-200">
             <Gift className="size-6" />
           </span>
         </div>
         <div className="mt-4">
-          <ProgressBar value={stats.points} max={stats.nextReward} label="Digital certificate progress" />
+          <ProgressBar value={stats.points} max={stats.nextReward} label="Next vault unlock" tone="light" />
         </div>
       </Card>
+
+      <div className="mb-4"><DailyQuestCard title="Bonus mission" detail="Make one verified scan today" progress={0} total={1} reward="+10 leaf points" icon={Star} /></div>
 
       <div className="grid gap-3">
         {rewards.map((reward) => {
@@ -47,7 +50,7 @@ export default function RewardsPage() {
                   </div>
                   <p className="mt-1 text-sm leading-6 text-slate-500">{reward.description}</p>
                   <Button className="mt-3 w-full" variant={canRedeem ? "primary" : "outline"} onClick={() => setRedeemed(reward)} disabled={!canRedeem}>
-                    Redeem
+                    {canRedeem ? <><Sparkles className="size-4" /> Unlock reward</> : <><LockKeyhole className="size-4" /> {reward.points - stats.points} points to go</>}
                   </Button>
                 </div>
               </div>

@@ -47,6 +47,20 @@ function makeCloud(x, y, z, scale) {
   return cloud;
 }
 
+function makeRecoveryBeacon() {
+  const beacon = new THREE.Group();
+  const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.028, 0.045, 0.48, 7), makeMaterial("#176b43"));
+  stem.position.y = 0.33;
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.022, 8, 18), makeMaterial("#f6c84b"));
+  ring.rotation.x = Math.PI / 2;
+  ring.position.y = 0.57;
+  const core = new THREE.Mesh(new THREE.SphereGeometry(0.1, 10, 10), makeMaterial("#f8d96b", { emissive: "#d2a432", emissiveIntensity: 0.25 }));
+  core.position.y = 0.57;
+  beacon.add(stem, ring, core);
+  beacon.position.set(0.42, 0.12, -0.18);
+  return beacon;
+}
+
 function disposeObject(object) {
   object.traverse((child) => {
     if (!child.isMesh) return;
@@ -102,7 +116,7 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
     }
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color("#eaf8ee");
+    scene.background = new THREE.Color("#f6fbf5");
     const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 100);
     camera.position.set(0, 1.9, 4.65);
     camera.lookAt(0, 0.22, 0);
@@ -119,13 +133,13 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
     const worldBaseY = 0.38;
     world.position.y = worldBaseY;
     scene.add(world);
-    const soil = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.22, 0.36, 36), makeMaterial("#785f42"));
+    const soil = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.22, 0.36, 36), makeMaterial("#4a5b3b"));
     soil.position.y = -0.14;
     world.add(soil);
-    const ground = new THREE.Mesh(new THREE.CylinderGeometry(1.46, 1.46, 0.12, 36), makeMaterial("#78b85e"));
+    const ground = new THREE.Mesh(new THREE.CylinderGeometry(1.46, 1.46, 0.12, 36), makeMaterial("#83c96b"));
     ground.position.y = 0.05;
     world.add(ground);
-    const waterMaterial = makeMaterial("#7aaed0", { roughness: 0.34, metalness: 0.08 });
+    const waterMaterial = makeMaterial("#73c8cf", { roughness: 0.28, metalness: 0.1 });
     const river = new THREE.Mesh(new THREE.CircleGeometry(0.52, 32), waterMaterial);
     river.rotation.x = -Math.PI / 2;
     river.position.set(-0.34, 0.12, 0.06);
@@ -144,6 +158,8 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
       plants.add(flower);
     }
     world.add(plants);
+    const beacon = makeRecoveryBeacon();
+    world.add(beacon);
 
     const plastic = Array.from({ length: 5 }, (_, index) => makePlastic(index));
     plastic.forEach((item) => world.add(item));
@@ -185,7 +201,7 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
     resizeObserver.observe(mount);
     resize();
 
-    sceneRef.current = { camera, world, trees, plants, plastic, waterMaterial, targetZoom: 4.65, targetPan: 0, renderedItems: verifiedItems, recovery: recovery.progress };
+    sceneRef.current = { camera, world, trees, plants, plastic, beacon, waterMaterial, targetZoom: 4.65, targetPan: 0, renderedItems: verifiedItems, recovery: recovery.progress };
     let frameId = 0;
     const animate = (time) => {
       const current = sceneRef.current;
@@ -255,8 +271,9 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
       tree.userData.targetScale = showTree ? 1 : 0.01;
       if (!hasNewVerifiedItem) tree.scale.setScalar(showTree ? 1 : 0.01);
     });
-    current.plants.scale.setScalar(0.35 + progress * 0.65);
-    current.waterMaterial.color.set(progress >= 0.65 ? "#5dbad3" : progress >= 0.35 ? "#74aac2" : "#7c9aab");
+        current.plants.scale.setScalar(0.35 + progress * 0.65);
+    current.beacon.scale.setScalar(0.55 + progress * 0.45);
+    current.waterMaterial.color.set(progress >= 0.65 ? "#53c8d4" : progress >= 0.35 ? "#6bb7c2" : "#84a8ad");
     current.renderedItems = verifiedItems;
     current.recovery = progress;
   }, [verifiedItems, goalItems]);

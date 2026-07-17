@@ -8,7 +8,7 @@ export default function RegisterPage() {
   const navigate = useNavigate();
 
   return (
-    <AuthFrame title="Create profile" subtitle="Join the mock recycling program and start earning points.">
+    <AuthFrame title="Create profile" subtitle="Create your recovery passport and unlock your first local mission.">
       <form
         className="grid gap-4"
         onSubmit={(event) => {
@@ -21,7 +21,7 @@ export default function RegisterPage() {
         <InputField id="email" label="Email" icon={Mail} type="email" placeholder="member@example.com" />
         <InputField id="password" label="Password" icon={Lock} type="password" placeholder="Create password" />
         <Button type="submit" size="lg" className="mt-2 w-full">
-          Register
+          Start my journey
         </Button>
       </form>
       <p className="mt-5 text-center text-sm text-slate-500">

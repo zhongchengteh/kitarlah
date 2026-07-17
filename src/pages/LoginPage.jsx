@@ -8,7 +8,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   return (
-    <AuthFrame title="Welcome back" subtitle="Sign in with demo details to open your recycling dashboard.">
+    <AuthFrame title="Welcome back" subtitle="Your next recovery mission is ready when you are.">
       <form
         className="grid gap-4"
         onSubmit={(event) => {
@@ -20,7 +20,7 @@ export default function LoginPage() {
         <InputField id="email" label="Email" icon={Mail} type="email" placeholder="member@example.com" />
         <InputField id="password" label="Password" icon={Lock} type="password" placeholder="Password" />
         <Button type="submit" size="lg" className="mt-2 w-full">
-          Login
+          Continue your journey
         </Button>
       </form>
       <p className="mt-5 text-center text-sm text-slate-500">
@@ -44,6 +44,7 @@ export function AuthFrame({ title, subtitle, children }) {
         >
           <ArrowLeft className="size-5" />
         </Link>
+        <div className="mb-4 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-eco-800"><span className="grid size-7 place-items-center rounded-full bg-eco-100">1</span> Start your recovery journey</div>
         <Card variant="elevated" className="p-5">
           <h1 className="text-3xl font-black text-slate-950">{title}</h1>
           <p className="mt-2 text-sm leading-6 text-slate-500">{subtitle}</p>

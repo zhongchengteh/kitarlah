@@ -1,4 +1,4 @@
-import { BarChart3, Download, Users } from "lucide-react";
+import { BarChart3, Download, Sparkles, Users } from "lucide-react";
 import PageHeader from "../components/layout/PageHeader.jsx";
 import StatCard from "../components/features/StatCard.jsx";
 import Badge from "../components/ui/Badge.jsx";
@@ -10,9 +10,9 @@ export default function AdminDashboardPage() {
   return (
     <div className="animate-rise">
       <PageHeader
-        eyebrow="Admin dashboard"
-        title="Community analytics"
-        description="Mock analytics focused on sustained local plastic recovery."
+        eyebrow="Campaign control"
+        title="Recovery season dashboard"
+        description="Mock organiser analytics for sustained plastic recovery missions."
         action={
           <Button variant="secondary" size="sm">
             <Download className="size-4" />
@@ -25,6 +25,11 @@ export default function AdminDashboardPage() {
           <StatCard key={metric.label} {...metric} />
         ))}
       </div>
+
+      <Card variant="tinted" className="mt-5 flex items-center gap-3">
+        <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-eco-700 text-white"><Sparkles className="size-5" /></span>
+        <div><p className="text-xs font-bold uppercase tracking-wide text-eco-700">Season status</p><p className="mt-1 font-black text-eco-950">Community recovery sprint: 68% complete</p><p className="mt-1 text-sm text-eco-800">Booth challenges and learning quests are encouraging return visits.</p></div>
+      </Card>
 
       <section className="mt-5">
         <h2 className="mb-3 text-lg font-black text-slate-950">Weekly verified plastic entries</h2>

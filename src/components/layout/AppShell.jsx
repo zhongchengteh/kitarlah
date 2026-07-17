@@ -4,6 +4,7 @@ import { Link, Outlet } from "react-router-dom";
 import BottomNav from "./BottomNav.jsx";
 import Toast from "../ui/Toast.jsx";
 import ProfileAvatar from "../ui/ProfileAvatar.jsx";
+import GameStatusStrip from "../features/GameStatusStrip.jsx";
 
 export default function AppShell() {
   const [profileOpen, setProfileOpen] = useState(false);
@@ -65,6 +66,7 @@ export default function AppShell() {
             ) : null}
           </div>
         </div>
+        <GameStatusStrip />
         <main className="safe-bottom px-4 py-5">
           <Outlet />
         </main>

@@ -1,4 +1,4 @@
-import { Camera, CheckCircle2, QrCode, ScanLine, ShieldCheck, Upload } from "lucide-react";
+import { Camera, CheckCircle2, QrCode, ScanLine, ShieldCheck, Sparkles, Upload } from "lucide-react";
 import { useRef, useState } from "react";
 import PageHeader from "../components/layout/PageHeader.jsx";
 import Badge from "../components/ui/Badge.jsx";
@@ -56,7 +56,7 @@ export default function ScanPage() {
 
   return (
     <div className="animate-rise">
-      <PageHeader eyebrow="QR verification" title="Scan plastic QR" description="Record a plastic recycling entry for this prototype." />
+      <PageHeader eyebrow="Recovery mission" title="Scan plastic QR" description="Verify a clean plastic item to grow your recovery world." />
 
       <Card variant="elevated" className="overflow-hidden p-0">
         <div className="bg-slate-950 p-5 text-white">
@@ -68,7 +68,7 @@ export default function ScanPage() {
           </div>
         </div>
         <div className="p-4">
-          {!session ? <Button className="w-full" size="lg" onClick={beginScan} disabled={scanning}>{scanning ? <ScanLine className="size-5 animate-pulse" /> : <Camera className="size-5" />}{scanning ? "Scanning..." : "Scan physical bin QR"}</Button> : <div className="rounded-lg bg-eco-50 p-3"><div className="flex items-start justify-between gap-3"><div><p className="font-black text-eco-950">{session.location}</p><p className="mt-1 text-xs text-eco-800">Session {session.id} - {session.expires}</p></div><Badge variant="success">QR enabled</Badge></div></div>}
+          {!session ? <Button className="w-full" size="lg" onClick={beginScan} disabled={scanning}>{scanning ? <ScanLine className="size-5 animate-pulse" /> : <Camera className="size-5" />}{scanning ? "Finding the booth..." : "Start scan mission"}</Button> : <div className="rounded-lg bg-eco-50 p-3"><div className="flex items-start justify-between gap-3"><div><p className="font-black text-eco-950">{session.location}</p><p className="mt-1 text-xs text-eco-800">Session {session.id} - {session.expires}</p></div><Badge variant="success"><Sparkles className="mr-1 size-3" /> Quest live</Badge></div></div>}
         </div>
       </Card>
 
@@ -92,7 +92,7 @@ export default function ScanPage() {
       </Card> : null}
 
       <Card variant="tinted" className="mt-4"><p className="text-sm leading-6 text-eco-950">Empty, rinse and dry the container. Check the plastic resin/type accepted by this location. This is prototype validation, not production-grade fraud prevention.</p></Card>
-      <Modal open={success} title="Plastic entry verified" actionLabel="See recovery world" onClose={() => setSuccess(false)}>Your verified entry has updated your motivational recovery world. You now have {stats.verifiedItems} verified plastic items. Points were added as a secondary reward.</Modal>
+      <Modal open={success} title="Mission complete!" actionLabel="See recovery world" onClose={() => setSuccess(false)}>Your plastic entry is verified. Your recovery world has changed, and you earned a small leaf-point bonus. You now have {stats.verifiedItems} verified plastic items.</Modal>
     </div>
   );
 }

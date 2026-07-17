@@ -1,4 +1,4 @@
-import { Recycle, Sparkles } from "lucide-react";
+import { Flag, Recycle, Sparkles, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
 import Button from "../components/ui/Button.jsx";
 import Card from "../components/ui/Card.jsx";
@@ -11,6 +11,7 @@ export default function LandingPage() {
 
         <section className="mt-6 text-center">
           <h1 className="text-4xl font-black text-slate-950">Kitarlah</h1>
+          <span className="inline-flex items-center gap-1 rounded-full bg-eco-100 px-3 py-1 text-xs font-black text-eco-800"><Sparkles className="size-3.5" /> A playful plastic recovery journey</span>
           <p className="mt-3 text-base font-semibold text-eco-800">Recover plastic. Grow change.</p>
           <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-slate-500">
             A plastic recovery prototype for verified QR entries, better everyday choices, and cleaner local recycling.
@@ -33,13 +34,14 @@ export default function LandingPage() {
         <div className="mt-8 grid grid-cols-2 gap-3">
           <Card variant="tinted" className="p-4 text-center">
             <Recycle className="mx-auto size-7 text-eco-700" />
-            <p className="mt-2 text-sm font-black text-eco-900">Verify & recover</p>
+            <p className="mt-2 text-sm font-black text-eco-900">Scan missions</p>
           </Card>
           <Card variant="tinted" className="p-4 text-center">
-            <Sparkles className="mx-auto size-7 text-eco-700" />
-            <p className="mt-2 text-sm font-black text-eco-900">Learn & improve</p>
+            <Trophy className="mx-auto size-7 text-eco-700" />
+            <p className="mt-2 text-sm font-black text-eco-900">Unlock progress</p>
           </Card>
         </div>
+        <div className="mt-3 flex items-center justify-center gap-2 text-xs font-bold text-slate-500"><Flag className="size-3.5 text-eco-700" /> Complete local recovery routes at your pace</div>
       </div>
     </div>
   );

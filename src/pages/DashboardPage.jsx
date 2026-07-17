@@ -1,7 +1,8 @@
-import { BookOpen, Droplets, Flame, QrCode, Recycle, Scale } from "lucide-react";
+import { BookOpen, Droplets, Flame, QrCode, Recycle, Scale, Sparkles, Target } from "lucide-react";
 import { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import StatCard from "../components/features/StatCard.jsx";
+import DailyQuestCard from "../components/features/DailyQuestCard.jsx";
 import PageHeader from "../components/layout/PageHeader.jsx";
 import Badge from "../components/ui/Badge.jsx";
 import Button from "../components/ui/Button.jsx";
@@ -21,12 +22,16 @@ export default function DashboardPage() {
       <PageHeader eyebrow="Home" title="Hi, Alex" description="Recycle plastic correctly and watch your community recover." />
 
       <Link to="/app/scan" className="mb-5 block">
-        <Button className="w-full shadow-soft" size="lg"><QrCode className="size-5" /> Scan plastic QR</Button>
+        <Button className="w-full shadow-soft" size="lg"><QrCode className="size-5" /> Start a recovery scan <Sparkles className="size-4" /></Button>
       </Link>
+
+      <div className="mb-5">
+        <DailyQuestCard detail="Verify 2 clean plastic items" progress={Math.min(stats.verifiedItems % 3, 2)} total={2} reward="+20 leaf points" icon={Target} />
+      </div>
 
       <Card variant="elevated" className="mb-5 overflow-hidden p-0">
         <div className="p-4 pb-3">
-          <Badge variant="success">Living impact</Badge>
+          <div className="flex items-center justify-between gap-3"><Badge variant="success">Living impact</Badge><span className="inline-flex items-center gap-1 text-xs font-black text-amber-700"><Sparkles className="size-3.5" /> Level {Math.max(1, Math.ceil(stats.verifiedItems / 5))}</span></div>
           <h2 className="mt-2 text-xl font-black text-slate-950">Your plastic recovery world</h2>
           <p className="mt-1 text-sm leading-6 text-slate-500">Verified recycling removes litter and grows the environment.</p>
           <div className="mt-4 flex items-center justify-between gap-3">
@@ -39,7 +44,7 @@ export default function DashboardPage() {
           <PlasticRecoveryWorld verifiedItems={stats.verifiedItems} goalItems={stats.goalItems} stage={level} />
         </Suspense>
         <div className="border-t border-eco-100 bg-eco-50 px-4 py-3 text-xs font-semibold leading-5 text-eco-900">
-          {remainingItems ? `${remainingItems} more verified items unlock the next recovery milestone.` : "Milestone complete. Keep verifying items to begin the next recovery stage."} This is a motivational visualization, not an exact impact measurement.
+          {remainingItems ? `${remainingItems} more verified items unlock the next recovery milestone.` : "Milestone complete. Keep verifying items to begin the next recovery stage."} A playful motivation map, not an exact impact measurement.
         </div>
       </Card>
 
@@ -54,7 +59,7 @@ export default function DashboardPage() {
         <Card variant="tinted" className="flex gap-3">
           <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-eco-700 text-white"><Droplets className="size-5" /></span>
           <div>
-            <p className="text-xs font-bold uppercase tracking-wide text-eco-700">Today&apos;s plastic lesson</p>
+            <p className="text-xs font-bold uppercase tracking-wide text-eco-700">Knowledge quest</p>
             <h2 className="mt-1 font-black text-slate-950">Refuse first</h2>
             <p className="mt-1 text-sm leading-6 text-slate-600">Avoid unnecessary single-use plastic when a refill, reusable item, or no packaging option works.</p>
             <Link to="/app/education" className="mt-3 inline-flex items-center gap-1 text-sm font-black text-eco-800">Learn the 7 Rs <BookOpen className="size-4" /></Link>

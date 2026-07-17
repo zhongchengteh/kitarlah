@@ -1,4 +1,6 @@
-import { AlertTriangle, ArrowRight, CheckCircle2, Leaf, Recycle, Trash2, XCircle } from "lucide-react";
+import { AlertTriangle, ArrowRight, CheckCircle2, Leaf, Recycle, Sparkles, Trash2, XCircle } from "lucide-react";
+import { useState } from "react";
+import DailyQuestCard from "../components/features/DailyQuestCard.jsx";
 import PageHeader from "../components/layout/PageHeader.jsx";
 import Badge from "../components/ui/Badge.jsx";
 import Card from "../components/ui/Card.jsx";
@@ -31,9 +33,14 @@ const acceptedItems = ["Plastic bottles", "Clean food containers", "Aluminium ca
 const rejectedItems = ["Food waste", "Oily containers", "Tissues", "Mixed dirty packaging"];
 
 export default function EducationPage() {
+  const [checkedSteps, setCheckedSteps] = useState([]);
+  const completeStep = (index) => setCheckedSteps((current) => current.includes(index) ? current.filter((item) => item !== index) : [...current, index]);
+
   return (
     <div className="animate-rise">
-      <PageHeader eyebrow="Plastic learning" title="Make plastic recovery count" description="Use the 7 Rs and local guidance to avoid contamination." />
+      <PageHeader eyebrow="Learning quests" title="Train for cleaner recycling" description="Finish short challenges to build plastic-sorting confidence." />
+
+      <div className="mb-4"><DailyQuestCard title="Learning mission" detail="Complete the clean-container checklist" progress={checkedSteps.length} total={steps.length} reward="+25 leaf points" icon={Sparkles} /></div>
 
       <Card variant="elevated" className="mb-4 !bg-eco-800 !text-white">
         <div className="flex gap-3">
@@ -42,7 +49,7 @@ export default function EducationPage() {
           </span>
           <div>
             <Badge className="mb-2 bg-white/15 text-white">SDG 12</Badge>
-            <h2 className="text-xl font-black">Responsible consumption starts with everyday choices.</h2>
+            <h2 className="text-xl font-black">A small skill unlocks cleaner recovery.</h2>
             <p className="mt-2 text-sm leading-6 text-eco-50">
               SDG 12 starts before the bin: Refuse unnecessary single-use plastic, Reuse what you can, then recycle accepted clean containers.
             </p>
@@ -70,9 +77,9 @@ export default function EducationPage() {
           <ol className="grid gap-3">
             {steps.map((step, index) => (
               <li key={step.title} className="flex items-start gap-3">
-                <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-eco-100 text-sm font-black text-eco-800">
-                  {index + 1}
-                </span>
+                <button type="button" aria-label={`Mark ${step.title} complete`} aria-pressed={checkedSteps.includes(index)} onClick={() => completeStep(index)} className={`grid size-8 shrink-0 place-items-center rounded-lg text-sm font-black transition ${checkedSteps.includes(index) ? "bg-eco-700 text-white" : "bg-eco-100 text-eco-800"}`}>
+                  {checkedSteps.includes(index) ? <CheckCircle2 className="size-4" /> : index + 1}
+                </button>
                 <span>
                   <span className="block text-sm font-black text-slate-900">{step.title}</span>
                   <span className="mt-1 block text-sm leading-6 text-slate-500">{step.text}</span>
