@@ -8,13 +8,13 @@ import { locations } from "../data/mockData.js";
 export default function LocationsPage() {
   return (
     <div className="animate-rise">
-      <PageHeader eyebrow="Locations" title="Find recycling points" description="Static public locations for the clickable prototype." />
+      <PageHeader eyebrow="Plastic locations" title="Find plastic collection points" description="Mock plastic-only locations for the clickable prototype." />
 
       <Card variant="tinted" className="mb-4">
         <div className="flex gap-3">
           <MapPin className="mt-0.5 size-5 shrink-0 text-eco-700" />
           <p className="text-sm leading-6 text-eco-900">
-            No live GPS or maps API is used. Each location includes a simple external Google Maps search link.
+            QR-enabled booths can validate plastic entries. Opening hours and accepted plastic types are mock information; always check the location label.
           </p>
         </div>
       </Card>
@@ -22,6 +22,7 @@ export default function LocationsPage() {
       <div className="grid gap-3">
         {locations.map((location) => (
           <Card key={location.id} variant="interactive">
+            <img src={`${import.meta.env.BASE_URL}${location.image}`} alt="" className="mb-4 aspect-[2/1] w-full rounded-lg border border-eco-100 bg-eco-50 object-cover" />
             <div className="mb-3 flex items-start justify-between gap-3">
               <div>
                 <Badge variant={location.category.includes("Bulky") ? "warning" : "success"}>{location.category}</Badge>
@@ -41,8 +42,12 @@ export default function LocationsPage() {
                 <dd>{location.hours}</dd>
               </div>
               <div>
-                <dt className="font-bold text-slate-800">Accepted waste</dt>
+                <dt className="font-bold text-slate-800">Accepted plastic types</dt>
                 <dd>{location.types.join(", ")}</dd>
+              </div>
+              <div>
+                <dt className="font-bold text-slate-800">Distance and QR</dt>
+                <dd>{location.distance} - {location.qrEnabled ? "QR-enabled booth" : "No QR verification"}</dd>
               </div>
             </dl>
             <a href={location.map} target="_blank" rel="noreferrer">

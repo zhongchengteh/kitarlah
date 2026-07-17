@@ -12,7 +12,7 @@ export default function AdminDashboardPage() {
       <PageHeader
         eyebrow="Admin dashboard"
         title="Community analytics"
-        description="Mock administration view for showcase reporting."
+        description="Mock analytics focused on sustained local plastic recovery."
         action={
           <Button variant="secondary" size="sm">
             <Download className="size-4" />
@@ -27,7 +27,7 @@ export default function AdminDashboardPage() {
       </div>
 
       <section className="mt-5">
-        <h2 className="mb-3 text-lg font-black text-slate-950">Weekly scan activity</h2>
+        <h2 className="mb-3 text-lg font-black text-slate-950">Weekly verified plastic entries</h2>
         <Card variant="elevated">
           <div className="flex h-40 items-end gap-2">
             {[38, 52, 44, 70, 62, 84, 76].map((height, index) => (
@@ -41,7 +41,7 @@ export default function AdminDashboardPage() {
       </section>
 
       <section className="mt-5">
-        <h2 className="mb-3 text-lg font-black text-slate-950">Campaign performance</h2>
+        <h2 className="mb-3 text-lg font-black text-slate-950">Booth and learning engagement</h2>
         <div className="grid gap-3">
           {campaignPerformance.map((campaign) => (
             <Card key={campaign.name}>
@@ -55,6 +55,13 @@ export default function AdminDashboardPage() {
             </Card>
           ))}
         </div>
+      </section>
+
+      <section className="mt-5">
+        <Card variant="tinted">
+          <h2 className="font-black text-eco-950">Participation signals</h2>
+          <p className="mt-2 text-sm leading-6 text-eco-900">Track booth engagement, repeat attendance, recycling frequency, completed learning tips, and participant feedback. Social reach is secondary to sustained real-world participation.</p>
+        </Card>
       </section>
 
       <section className="mt-5">

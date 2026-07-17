@@ -24,7 +24,7 @@ export default function LoginPage() {
         </Button>
       </form>
       <p className="mt-5 text-center text-sm text-slate-500">
-        New to Kitarlar?{" "}
+        New to Kitarlah?{" "}
         <Link to="/register" className="font-bold text-eco-800">
           Create account
         </Link>

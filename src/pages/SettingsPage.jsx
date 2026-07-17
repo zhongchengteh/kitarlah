@@ -1,12 +1,15 @@
-import { Bell, Globe2, Lock, ShieldCheck } from "lucide-react";
+import { Bell, Camera, CircleHelp, Globe2, Lock, MapPin, ShieldCheck } from "lucide-react";
 import PageHeader from "../components/layout/PageHeader.jsx";
 import Badge from "../components/ui/Badge.jsx";
 import Card from "../components/ui/Card.jsx";
 
 const settings = [
-  { title: "Reminder preference", value: "Weekly recycling reminder", icon: Bell },
+  { title: "Notifications", value: "Weekly plastic recycling reminder", icon: Bell },
+  { title: "Camera permission", value: "Used for QR scanning in a full version", icon: Camera },
+  { title: "Location permission", value: "Off - no live location in this prototype", icon: MapPin },
   { title: "Language", value: "English", icon: Globe2 },
   { title: "Privacy", value: "Demo profile only", icon: Lock },
+  { title: "Help and SDG 12", value: "Responsible consumption and production", icon: CircleHelp },
   { title: "Prototype mode", value: "No real account or backend", icon: ShieldCheck },
 ];
 

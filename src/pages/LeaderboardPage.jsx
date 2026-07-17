@@ -9,7 +9,7 @@ export default function LeaderboardPage() {
 
   return (
     <div className="animate-rise">
-      <PageHeader eyebrow="Leaderboard" title="Community rankings" description="Friendly competition based on mock recycling points." />
+      <PageHeader eyebrow="Leaderboard" title="Community participation" description="An optional privacy-friendly weekly view of verified plastic recycling." />
 
       <div className="mb-5 grid grid-cols-3 items-end gap-2">
         {topThree.map((participant, index) => (

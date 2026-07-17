@@ -1,9 +1,9 @@
-export default function ProgressBar({ value, max, label }) {
+export default function ProgressBar({ value, max, label, tone = "dark" }) {
   const percent = Math.min(100, Math.round((value / max) * 100));
 
   return (
     <div>
-      <div className="mb-2 flex items-center justify-between text-xs font-semibold text-white">
+      <div className={`mb-2 flex items-center justify-between text-xs font-semibold ${tone === "light" ? "text-white" : "text-slate-600"}`}>
         <span>{label}</span>
         <span>{percent}%</span>
       </div>

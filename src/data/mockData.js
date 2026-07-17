@@ -16,9 +16,9 @@ import {
 } from "lucide-react";
 
 export const recentActivities = [
-  { id: "a1", item: "PET bottle", location: "Neighborhood Eco Bin", points: 10, time: "Today, 10:20 AM" },
-  { id: "a2", item: "Plastic cup", location: "Community Center Bin", points: 8, time: "Yesterday" },
-  { id: "a3", item: "Food container", location: "Market Recycling Point", points: 12, time: "2 days ago" },
+  { id: "a1", item: "PET bottle", location: "Community Eco Bin Station", points: 10, time: "Today, 10:20 AM", status: "Verified", quantity: 1, weight: 0.1 },
+  { id: "a2", item: "Plastic cup", location: "Community Center Bin", points: 8, time: "Yesterday", status: "Verified", quantity: 1, weight: 0.08 },
+  { id: "a3", item: "Clean food container", location: "Market Recycling Wall", points: 12, time: "2 days ago", status: "Verified", quantity: 2, weight: 0.2 },
 ];
 
 export const rewards = [
@@ -34,8 +34,11 @@ export const locations = [
     name: "Community Eco Bin Station",
     address: "Community Center Main Entrance",
     hours: "Mon-Fri, 8:00 AM - 8:00 PM",
-    types: ["PET bottles", "Plastic cups", "Clean containers"],
-    category: "Public recycling point",
+    types: ["PET bottles", "HDPE containers", "Clean plastic cups"],
+    category: "Plastic recovery booth",
+    distance: "0.6 km away",
+    qrEnabled: true,
+    image: "station-community.svg",
     map: "https://www.google.com/maps/search/Community+Center",
   },
   {
@@ -43,8 +46,11 @@ export const locations = [
     name: "Market Recycling Wall",
     address: "Local Market, Level 1 near food court",
     hours: "Daily, 7:00 AM - 10:00 PM",
-    types: ["Plastic bottles", "Aluminium cans", "Paper"],
-    category: "Public recycling point",
+    types: ["PET bottles", "Clean food containers", "Rigid plastic packaging"],
+    category: "Plastic collection point",
+    distance: "1.4 km away",
+    qrEnabled: true,
+    image: "station-market.svg",
     map: "https://www.google.com/maps/search/Local+Market",
   },
   {
@@ -52,17 +58,20 @@ export const locations = [
     name: "Municipal Bulky Waste Bay",
     address: "Recycling Facility, Service Road B",
     hours: "Wed and Fri, 10:00 AM - 4:00 PM",
-    types: ["Bulky plastics", "Broken bins", "Large packaging"],
-    category: "Bulky waste disposal",
+    types: ["Bulky plastics", "Large plastic packaging", "Broken household plastic"],
+    category: "Bulky plastic disposal",
+    distance: "3.2 km away",
+    qrEnabled: false,
+    image: "station-bulky.svg",
     map: "https://www.google.com/maps/search/Facilities+Block",
   },
 ];
 
 export const educationCards = [
-  { title: "Plastic lasts centuries", text: "Many plastics can persist for hundreds of years when not recovered properly.", icon: ShieldCheck },
-  { title: "Clean before recycling", text: "Rinse containers so bins stay usable and contamination stays low.", icon: Recycle },
-  { title: "SDG 12 matters", text: "Responsible consumption starts with reducing waste and improving reuse habits.", icon: Leaf },
-  { title: "Small habits scale", text: "One bottle a day becomes hundreds of recovered items across a semester.", icon: Sprout },
+  { title: "Refuse unnecessary plastic", text: "The first R is Refuse: choose no straw, no bag, refill, or a reusable option before recycling is needed.", icon: ShieldCheck },
+  { title: "Clean before recycling", text: "Empty, rinse and dry containers. Food residue can contaminate otherwise recyclable materials.", icon: Recycle },
+  { title: "Check local acceptance", text: "Plastic types vary by facility. Use the bin label and resin/type guidance at your location.", icon: Leaf },
+  { title: "Reuse before recycling", text: "Reusing a durable container usually extends its useful life before it becomes a recycling item.", icon: Sprout },
 ];
 
 export const leaderboard = [
@@ -81,17 +90,17 @@ export const features = [
 ];
 
 export const adminMetrics = [
-  { label: "Total users", value: "1,248", icon: Users, tone: "sky" },
-  { label: "Total scans", value: "8,930", icon: Recycle, tone: "eco" },
-  { label: "Active campaigns", value: "6", icon: CalendarDays, tone: "amber" },
-  { label: "Rewards redeemed", value: "392", icon: Award, tone: "rose" },
+  { label: "Participants", value: "1,248", icon: Users, tone: "sky" },
+  { label: "Verified entries", value: "8,930", icon: Recycle, tone: "eco" },
+  { label: "Plastic collected", value: "742 kg", icon: CalendarDays, tone: "amber" },
+  { label: "Repeat attendance", value: "64%", icon: Award, tone: "rose" },
 ];
 
 export const campaignPerformance = [
-  { name: "Bottle Week", value: 86 },
-  { name: "Clean Cup Drive", value: 68 },
-  { name: "Hostel Challenge", value: 74 },
-  { name: "SDG Fair", value: 92 },
+  { name: "Bottle Week - verified return rate", value: 86 },
+  { name: "Clean Cup Drive - learning completion", value: 68 },
+  { name: "Community booth engagement", value: 74 },
+  { name: "SDG 12 return attendance", value: 92 },
 ];
 
 export const activeUsers = [

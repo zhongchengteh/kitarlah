@@ -33,7 +33,7 @@ const rejectedItems = ["Food waste", "Oily containers", "Tissues", "Mixed dirty 
 export default function EducationPage() {
   return (
     <div className="animate-rise">
-      <PageHeader eyebrow="Awareness" title="Recycle the right way" description="Practical guidance for cleaner sorting and better recovery." />
+      <PageHeader eyebrow="Plastic learning" title="Make plastic recovery count" description="Use the 7 Rs and local guidance to avoid contamination." />
 
       <Card variant="elevated" className="mb-4 !bg-eco-800 !text-white">
         <div className="flex gap-3">
@@ -44,7 +44,7 @@ export default function EducationPage() {
             <Badge className="mb-2 bg-white/15 text-white">SDG 12</Badge>
             <h2 className="text-xl font-black">Responsible consumption starts with everyday choices.</h2>
             <p className="mt-2 text-sm leading-6 text-eco-50">
-              Reduce waste, separate recyclables, and keep materials clean so they can re-enter useful production cycles.
+              SDG 12 starts before the bin: Refuse unnecessary single-use plastic, Reuse what you can, then recycle accepted clean containers.
             </p>
           </div>
         </div>
@@ -65,7 +65,7 @@ export default function EducationPage() {
       </div>
 
       <section className="mt-5">
-        <h2 className="mb-3 text-lg font-black text-slate-950">Step-by-step guide</h2>
+        <h2 className="mb-3 text-lg font-black text-slate-950">How to recycle plastic properly</h2>
         <Card variant="elevated">
           <ol className="grid gap-3">
             {steps.map((step, index) => (
@@ -87,7 +87,7 @@ export default function EducationPage() {
         <Card variant="elevated">
           <div className="mb-3 flex items-center gap-2">
             <CheckCircle2 className="size-5 text-eco-700" />
-            <h2 className="font-black text-slate-950">Recycle</h2>
+            <h2 className="font-black text-slate-950">Usually accepted</h2>
           </div>
           <ul className="grid gap-2">
             {acceptedItems.map((item) => (
@@ -100,7 +100,7 @@ export default function EducationPage() {
         <Card variant="elevated">
           <div className="mb-3 flex items-center gap-2">
             <XCircle className="size-5 text-red-600" />
-            <h2 className="font-black text-slate-950">Avoid</h2>
+            <h2 className="font-black text-slate-950">Keep out when dirty</h2>
           </div>
           <ul className="grid gap-2">
             {rejectedItems.map((item) => (
@@ -120,7 +120,7 @@ export default function EducationPage() {
           <div>
             <h2 className="font-black text-slate-950">When unsure, keep it out</h2>
             <p className="mt-1 text-sm leading-6 text-slate-500">
-              If an item is dirty, mixed-material, or not listed on the bin label, place it in general waste or check a local guide.
+              Acceptance changes by facility. If an item is dirty, mixed-material, or not listed on the bin label, check with the location instead of assuming it is recyclable.
             </p>
           </div>
         </div>

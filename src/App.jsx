@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import AppShell from "./components/layout/AppShell.jsx";
+import AdminShell from "./components/layout/AdminShell.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
@@ -28,6 +29,8 @@ export default function App() {
         <Route path="/app/leaderboard" element={<LeaderboardPage />} />
         <Route path="/app/profile" element={<ProfilePage />} />
         <Route path="/app/settings" element={<SettingsPage />} />
+      </Route>
+      <Route element={<AdminShell />}>
         <Route path="/admin" element={<AdminDashboardPage />} />
       </Route>
       <Route path="*" element={<LandingPage />} />
