@@ -39,8 +39,9 @@ export default function ScanPage() {
         <div className="p-4">
           <div className="mb-4 flex items-center justify-between">
             <div>
-              <p className="text-sm font-bold text-slate-950">Current points</p>
-              <p className="text-2xl font-black text-eco-800">{stats.points}</p>
+              <p className="text-sm font-bold text-slate-950">Current habitat</p>
+              <p className="text-2xl font-black text-eco-800">{stats.habitatHealth}%</p>
+              <p className="text-xs font-semibold text-slate-500">Habitat health</p>
             </div>
             <Badge variant="info">Demo mode</Badge>
           </div>
@@ -60,8 +61,8 @@ export default function ScanPage() {
         </div>
       </Card>
 
-      <Modal open={success} title="Plastic recycled successfully!" actionLabel="Awesome" onClose={() => setSuccess(false)}>
-        Your scan was recorded locally for the demo and 10 points were added to your dashboard.
+      <Modal open={success} title="Plastic recycled successfully!" actionLabel="View greener world" onClose={() => setSuccess(false)}>
+        Your entry helped the virtual environment recover. The home page habitat is now cleaner and more alive.
       </Modal>
     </div>
   );

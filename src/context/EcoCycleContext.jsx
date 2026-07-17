@@ -9,6 +9,8 @@ export function EcoCycleProvider({ children }) {
     scans: 15,
     streak: 5,
     nextReward: 200,
+    habitatHealth: 62,
+    restoredTrees: 12,
   });
   const [activities, setActivities] = useState(initialActivities);
   const [toast, setToast] = useState(null);
@@ -26,9 +28,11 @@ export function EcoCycleProvider({ children }) {
       ...current,
       points: current.points + 10,
       scans: current.scans + 1,
+      habitatHealth: Math.min(100, current.habitatHealth + 4),
+      restoredTrees: current.restoredTrees + 1,
     }));
     setActivities((current) => [activity, ...current].slice(0, 5));
-    setToast({ title: "Plastic recycled successfully!", message: "+10 points added" });
+    setToast({ title: "Plastic recycled successfully!", message: "Your virtual habitat grew healthier" });
   };
 
   const value = useMemo(
