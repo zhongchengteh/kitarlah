@@ -10,7 +10,7 @@ const variants = {
 
 export default function Badge({ children, variant = "neutral", className }) {
   return (
-    <span className={cn("inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold", variants[variant], className)}>
+    <span className={cn("inline-flex shrink-0 items-center whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold", variants[variant], className)}>
       {children}
     </span>
   );
