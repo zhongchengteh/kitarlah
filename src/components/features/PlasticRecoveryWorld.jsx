@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { ZoomIn, ZoomOut } from "lucide-react";
 import * as THREE from "three";
 
 const clamp = (value, minimum, maximum) => Math.min(maximum, Math.max(minimum, value));
@@ -67,8 +68,17 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
   const mountRef = useRef(null);
   const sceneRef = useRef(null);
   const [webglAvailable, setWebglAvailable] = useState(true);
+  const [zoom, setZoom] = useState(4.65);
   const recovery = getStage(verifiedItems, goalItems);
   const worldStage = stage || recovery.label;
+
+  const adjustZoom = (amount) => {
+    const current = sceneRef.current;
+    if (!current) return;
+    const nextZoom = clamp(current.targetZoom + amount, 3.55, 6.1);
+    current.targetZoom = nextZoom;
+    setZoom(nextZoom);
+  };
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -143,10 +153,15 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
       interaction.lastX = event.clientX;
     };
     const onPointerUp = () => { interaction.dragging = false; };
+    const onWheel = (event) => {
+      event.preventDefault();
+      adjustZoom(event.deltaY * 0.003);
+    };
     renderer.domElement.addEventListener("pointerdown", onPointerDown);
     renderer.domElement.addEventListener("pointermove", onPointerMove);
     renderer.domElement.addEventListener("pointerup", onPointerUp);
     renderer.domElement.addEventListener("pointercancel", onPointerUp);
+    renderer.domElement.addEventListener("wheel", onWheel, { passive: false });
 
     const resize = () => {
       const width = Math.max(mount.clientWidth, 1);
@@ -159,13 +174,16 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
     resizeObserver.observe(mount);
     resize();
 
-    sceneRef.current = { world, trees, plants, plastic, waterMaterial, renderedItems: verifiedItems, recovery: recovery.progress };
+    sceneRef.current = { camera, world, trees, plants, plastic, waterMaterial, targetZoom: 4.65, renderedItems: verifiedItems, recovery: recovery.progress };
     let frameId = 0;
     const animate = (time) => {
       const current = sceneRef.current;
       if (current) {
         world.rotation.y += (interaction.targetRotation - world.rotation.y) * 0.08;
         if (!reducedMotion && !interaction.dragging) interaction.targetRotation += 0.0016;
+        camera.position.z += (current.targetZoom - camera.position.z) * 0.12;
+        camera.position.y = camera.position.z * 0.409;
+        camera.lookAt(0, 0.22, 0);
         if (!reducedMotion) {
           world.position.y = Math.sin(time * 0.0011) * 0.045;
           cloudA.position.x = -1.08 + Math.sin(time * 0.00045) * 0.07;
@@ -197,6 +215,7 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
       renderer.domElement.removeEventListener("pointermove", onPointerMove);
       renderer.domElement.removeEventListener("pointerup", onPointerUp);
       renderer.domElement.removeEventListener("pointercancel", onPointerUp);
+      renderer.domElement.removeEventListener("wheel", onWheel);
       disposeObject(scene);
       renderer.dispose();
       renderer.domElement.remove();
@@ -236,8 +255,12 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
   }
 
   return (
-    <div>
-      <div ref={mountRef} className="h-[300px] w-full touch-pan-y overflow-hidden rounded-lg" aria-label={`Interactive motivational visualization: ${verifiedItems} of ${goalItems} verified plastic items, ${worldStage} stage. Drag to rotate.`} role="img" />
+    <div className="relative">
+      <div ref={mountRef} className="h-[300px] w-full touch-pan-y overflow-hidden rounded-lg" aria-label={`Interactive motivational visualization: ${verifiedItems} of ${goalItems} verified plastic items, ${worldStage} stage. Drag to rotate. Use zoom controls to adjust the view.`} role="img" />
+      <div className="absolute bottom-3 right-3 flex overflow-hidden rounded-lg border border-eco-200 bg-white/95 shadow-soft" role="group" aria-label="Adjust recovery world zoom">
+        <button type="button" aria-label="Zoom out" title="Zoom out" onClick={() => adjustZoom(0.45)} disabled={zoom >= 6.1} className="grid size-10 place-items-center border-r border-eco-100 text-eco-800 transition hover:bg-eco-50 disabled:cursor-not-allowed disabled:text-slate-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-eco-500"><ZoomOut className="size-4" /></button>
+        <button type="button" aria-label="Zoom in" title="Zoom in" onClick={() => adjustZoom(-0.45)} disabled={zoom <= 3.55} className="grid size-10 place-items-center text-eco-800 transition hover:bg-eco-50 disabled:cursor-not-allowed disabled:text-slate-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-eco-500"><ZoomIn className="size-4" /></button>
+      </div>
       <p className="sr-only">A motivational visualization only. It does not represent an exact measurement of real-world environmental impact.</p>
     </div>
   );
