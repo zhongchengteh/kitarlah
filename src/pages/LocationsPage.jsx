@@ -17,7 +17,7 @@ export default function LocationsPage() {
         <div className="flex gap-3">
           <MapPin className="mt-0.5 size-5 shrink-0 text-eco-700" />
           <p className="text-sm leading-6 text-eco-900">
-            QR-enabled booths can validate plastic entries. Opening hours and accepted plastic types are mock information; always check the location label.
+            These prototype booths use real Bukit Jalil venue addresses and representative recycling photos. Booth availability, distance, QR status, and accepted plastics are simulated for the showcase.
           </p>
         </div>
       </Card>
@@ -25,7 +25,7 @@ export default function LocationsPage() {
       <div className="grid gap-3">
         {locations.map((location) => (
           <Card key={location.id} variant="interactive">
-            <img src={`${import.meta.env.BASE_URL}${location.image}`} alt="" className="mb-4 aspect-[2/1] w-full rounded-lg border border-eco-100 bg-eco-50 object-cover" />
+            <img src={`${import.meta.env.BASE_URL}${location.image}`} alt={location.imageAlt} className="mb-4 aspect-[2/1] w-full rounded-lg border border-eco-100 bg-eco-50 object-cover" />
             <div className="mb-3 flex items-start justify-between gap-3">
               <div>
                 <div className="flex flex-wrap gap-2"><Badge variant={location.category.includes("Bulky") ? "warning" : "success"}>{location.category}</Badge>{location.qrEnabled ? <Badge variant="info">Quest-ready</Badge> : null}</div>

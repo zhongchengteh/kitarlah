@@ -2,6 +2,7 @@ import { Gift, LockKeyhole, Sparkles, Star } from "lucide-react";
 import { useState } from "react";
 import PageHeader from "../components/layout/PageHeader.jsx";
 import DailyQuestCard from "../components/features/DailyQuestCard.jsx";
+import RewardUnlockCelebration from "../components/features/RewardUnlockCelebration.jsx";
 import Badge from "../components/ui/Badge.jsx";
 import Button from "../components/ui/Button.jsx";
 import Card from "../components/ui/Card.jsx";
@@ -59,8 +60,8 @@ export default function RewardsPage() {
         })}
       </div>
 
-      <Modal open={Boolean(redeemed)} title="Reward redeemed successfully!" actionLabel="Done" onClose={() => setRedeemed(null)}>
-        {redeemed ? `${redeemed.title} has been added to your reward list for this demo.` : null}
+      <Modal open={Boolean(redeemed)} title="Reward unlocked" actionLabel="View my rewards" onClose={() => setRedeemed(null)}>
+        <RewardUnlockCelebration reward={redeemed} />
       </Modal>
     </div>
   );
