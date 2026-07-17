@@ -1,13 +1,13 @@
 import { Camera, CheckCircle2, QrCode, ScanLine, ShieldCheck, Sparkles, Upload } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import PageHeader from "../components/layout/PageHeader.jsx";
 import Badge from "../components/ui/Badge.jsx";
 import Button from "../components/ui/Button.jsx";
 import Card from "../components/ui/Card.jsx";
 import InputField from "../components/ui/InputField.jsx";
-import Modal from "../components/ui/Modal.jsx";
 import { useEcoCycle } from "../context/EcoCycleContext.jsx";
-import ScoreBurst from "../components/features/ScoreBurst.jsx";
+import CollectionSimulationModal from "../components/features/CollectionSimulationModal.jsx";
+import { calculateSessionPoints, plasticRewardRates } from "../lib/rewardModel.js";
 
 const sessionId = () => `BIN-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
 
@@ -17,10 +17,12 @@ export default function ScanPage() {
   const uploadInputRef = useRef(null);
   const [scanning, setScanning] = useState(false);
   const [session, setSession] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const [simulationPhase, setSimulationPhase] = useState(null);
+  const [validationReason, setValidationReason] = useState("");
   const [error, setError] = useState("");
   const [evidenceLabel, setEvidenceLabel] = useState("");
-  const [form, setForm] = useState({ plasticType: "PET bottle", quantity: "1", weight: "0.1", evidence: false });
+  const [form, setForm] = useState({ plasticCode: "PET_01", quantity: "1", weight: "0.1", evidence: false });
+  const calculation = useMemo(() => calculateSessionPoints(form.plasticCode, form.quantity), [form.plasticCode, form.quantity]);
 
   const beginScan = () => {
     setScanning(true);
@@ -41,19 +43,28 @@ export default function ScanPage() {
     setError("");
   };
 
-  const verify = () => {
+  const beginValidation = () => {
     if (!form.evidence) {
       setError("Photo evidence is required before this entry can be verified.");
       return;
     }
-    const result = verifyScan(session.id, { ...form, location: session.location });
-    if (!result.ok) {
-      setError(result.reason);
-      return;
-    }
-    setSuccess(true);
-    setSession(null);
+    setSimulationPhase("cleanliness");
   };
+
+  useEffect(() => {
+    if (simulationPhase !== "validating") return undefined;
+    const timer = window.setTimeout(() => {
+      const result = verifyScan(session?.id, { ...form, plasticType: calculation.material.shortLabel, location: session?.location });
+      if (result.ok) {
+        setSession(null);
+        setSimulationPhase("success");
+      } else {
+        setValidationReason(result.reason);
+        setSimulationPhase("rejected");
+      }
+    }, 1650);
+    return () => window.clearTimeout(timer);
+  }, [simulationPhase]);
 
   return (
     <div className="animate-rise">
@@ -76,8 +87,9 @@ export default function ScanPage() {
       {session ? <Card variant="elevated" className="mt-4">
         <div className="mb-4 flex items-center gap-3"><span className="grid size-10 place-items-center rounded-lg bg-eco-100 text-eco-700"><ShieldCheck className="size-5" /></span><div><h2 className="font-black text-slate-950">Confirm plastic entry</h2><p className="text-xs leading-5 text-slate-500">Prototype validation: one local use per QR session.</p></div></div>
         <div className="grid gap-3">
-          <label className="grid gap-1 text-sm font-bold text-slate-800">Plastic type<select value={form.plasticType} onChange={(event) => setForm({ ...form, plasticType: event.target.value })} className="h-12 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-800 outline-none focus:border-eco-500"><option>PET bottle</option><option>HDPE container</option><option>Plastic cup</option><option>Clean food container</option></select></label>
+          <label className="grid gap-1 text-sm font-bold text-slate-800">Plastic type<select value={form.plasticCode} onChange={(event) => setForm({ ...form, plasticCode: event.target.value })} className="h-12 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-800 outline-none focus:border-eco-500">{plasticRewardRates.map((item) => <option key={item.code} value={item.code}>{item.label} - {item.rate} pts</option>)}</select></label>
           <div className="grid grid-cols-2 gap-3"><InputField label="Quantity" type="number" min="1" value={form.quantity} onChange={(event) => setForm({ ...form, quantity: event.target.value })} /><InputField label="Estimated kg" type="number" min="0.1" step="0.1" value={form.weight} onChange={(event) => setForm({ ...form, weight: event.target.value })} /></div>
+          <div className={`rounded-lg p-3 ${calculation.material.accepted ? "bg-eco-50 text-eco-950" : "bg-red-50 text-red-800"}`}><div className="flex items-center justify-between gap-3"><span className="text-sm font-bold">Estimated verified award</span><strong className="text-lg">{calculation.total} pts</strong></div><p className="mt-1 text-xs leading-5">{calculation.material.accepted ? `${calculation.itemPoints} item points + ${calculation.visitBonus} booth visit bonus` : calculation.material.guidance}</p></div>
           <div className={`rounded-lg border border-dashed p-3 ${form.evidence ? "border-eco-200 bg-eco-50" : "border-amber-300 bg-amber-50"}`}>
             <div className="mb-3 flex items-center justify-between gap-3"><p className="text-sm font-bold text-slate-900">Photo evidence</p><Badge variant={form.evidence ? "success" : "warning"}>{evidenceLabel || "Required"}</Badge></div>
             <div className="grid grid-cols-2 gap-2">
@@ -88,12 +100,12 @@ export default function ScanPage() {
             <input ref={uploadInputRef} type="file" accept="image/*" className="sr-only" onChange={(event) => selectEvidence(event, "upload")} />
           </div>
           {error ? <p className="text-sm font-semibold text-red-600">{error}</p> : null}
-          <Button className="w-full" size="lg" onClick={verify} disabled={!form.evidence}><CheckCircle2 className="size-5" /> {form.evidence ? "Verify plastic entry" : "Add photo to verify"}</Button>
+          <Button className="w-full" size="lg" onClick={beginValidation} disabled={!form.evidence}><CheckCircle2 className="size-5" /> {form.evidence ? "Submit for validation" : "Add photo to verify"}</Button>
         </div>
       </Card> : null}
 
       <Card variant="tinted" className="mt-4"><p className="text-sm leading-6 text-eco-950">Empty, rinse and dry the container. Check the plastic resin/type accepted by this location. This is prototype validation, not production-grade fraud prevention.</p></Card>
-      <Modal open={success} title="Mission complete!" actionLabel="See recovery world" onClose={() => setSuccess(false)}><ScoreBurst points={Math.max(Number(form.quantity) || 1, 1) * 10} />Your plastic entry is verified and your recovery world has changed. You now have {stats.verifiedItems} verified plastic items.</Modal>
+      <CollectionSimulationModal phase={simulationPhase} calculation={calculation} reason={validationReason} availablePoints={stats.availablePoints} onConfirm={() => setSimulationPhase("validating")} onClose={() => setSimulationPhase(null)} />
     </div>
   );
 }

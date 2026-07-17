@@ -1,7 +1,7 @@
 import { CheckCircle2, Circle, Sparkles } from "lucide-react";
 import Card from "../ui/Card.jsx";
 
-export default function DailyQuestCard({ title = "Today\'s recovery quest", detail, progress, total, reward = "+20 leaf points", icon: Icon = Sparkles }) {
+export default function DailyQuestCard({ title = "Today\'s recovery quest", detail, progress, total, reward = "Points after verified recycling", icon: Icon = Sparkles }) {
   const complete = progress >= total;
   const percentage = Math.min((progress / total) * 100, 100);
 

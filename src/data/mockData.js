@@ -16,9 +16,9 @@ import {
 } from "lucide-react";
 
 export const recentActivities = [
-  { id: "a1", item: "PET bottle", location: "Community Eco Bin Station", points: 10, time: "Today, 10:20 AM", status: "Verified", quantity: 1, weight: 0.1 },
-  { id: "a2", item: "Plastic cup", location: "Community Center Bin", points: 8, time: "Yesterday", status: "Verified", quantity: 1, weight: 0.08 },
-  { id: "a3", item: "Clean food container", location: "Market Recycling Wall", points: 12, time: "2 days ago", status: "Verified", quantity: 2, weight: 0.2 },
+  { id: "a1", item: "PET bottle", location: "Community Eco Bin Station", points: 15, time: "Today, 10:20 AM", status: "Verified", quantity: 1, weight: 0.1 },
+  { id: "a2", item: "PP plastic cup", location: "Community Center Bin", points: 13, time: "Yesterday", status: "Verified", quantity: 1, weight: 0.08 },
+  { id: "a3", item: "PP food container", location: "Market Recycling Wall", points: 21, time: "2 days ago", status: "Verified", quantity: 2, weight: 0.2 },
 ];
 
 export const rewards = [

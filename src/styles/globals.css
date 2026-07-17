@@ -94,3 +94,10 @@ select {
 .score-total-pop { animation: score-pop 520ms ease-out both; }
 .score-gain-float { animation: score-float 1.3s ease-out both; }
 .score-burst { animation: reward-unlock-pop 520ms ease-out both; }
+
+@keyframes collection-progress {
+  from { width: 8%; }
+  to { width: 100%; }
+}
+
+.collection-progress { animation: collection-progress 1.6s ease-in-out both; }

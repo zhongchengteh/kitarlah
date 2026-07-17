@@ -5,6 +5,7 @@ import PageHeader from "../components/layout/PageHeader.jsx";
 import Badge from "../components/ui/Badge.jsx";
 import Card from "../components/ui/Card.jsx";
 import { educationCards } from "../data/mockData.js";
+import { plasticRewardRates, VISIT_BONUS } from "../lib/rewardModel.js";
 
 const steps = [
   {
@@ -38,9 +39,22 @@ export default function EducationPage() {
 
   return (
     <div className="animate-rise">
-      <PageHeader eyebrow="Learning quests" title="Train for cleaner recycling" description="Finish short challenges to build plastic-sorting confidence." />
+      <PageHeader eyebrow="Recycling guide" title="Sort correctly and understand rewards" description="Learn the validation process, material rates, and cleaner plastic preparation." />
 
-      <div className="mb-4"><DailyQuestCard title="Learning mission" detail="Complete the clean-container checklist" progress={checkedSteps.length} total={steps.length} reward="+25 leaf points" icon={Sparkles} /></div>
+      <div className="mb-4"><DailyQuestCard title="Sorting practice" detail="Complete the clean-container checklist" progress={checkedSteps.length} total={steps.length} reward="Practice only - points require a verified deposit" icon={Sparkles} /></div>
+
+      <section id="points-guide" className="mb-5 scroll-mt-28">
+        <Card variant="elevated">
+          <Badge variant="success">Reward tutorial</Badge>
+          <h2 className="mt-2 text-xl font-black text-slate-950">How recycling points work</h2>
+          <p className="mt-2 text-sm leading-6 text-slate-600">For each approved booth session: <strong>session points = quantity x material rate + {VISIT_BONUS}-point visit bonus</strong>. Unsupported or contaminated items are rejected and earn zero.</p>
+          <div className="mt-4 grid gap-2">
+            {plasticRewardRates.map((item) => <div key={item.code} className="flex items-start justify-between gap-3 rounded-lg bg-slate-50 p-3"><div><p className="text-sm font-black text-slate-900">{item.shortLabel}</p><p className="mt-0.5 text-xs leading-5 text-slate-500">{item.guidance}</p></div><Badge variant={item.accepted ? "success" : "neutral"}>{item.rate} pts</Badge></div>)}
+          </div>
+          <div className="mt-4 grid grid-cols-3 gap-2 text-center"><div className="rounded-lg bg-eco-50 p-2"><p className="text-lg font-black text-eco-900">Q x R</p><p className="text-[0.65rem] font-bold text-eco-700">Item points</p></div><div className="rounded-lg bg-amber-50 p-2"><p className="text-lg font-black text-amber-800">+{VISIT_BONUS}</p><p className="text-[0.65rem] font-bold text-amber-700">Visit bonus</p></div><div className="rounded-lg bg-sky-50 p-2"><p className="text-lg font-black text-sky-900">= Total</p><p className="text-[0.65rem] font-bold text-sky-700">After approval</p></div></div>
+          <p className="mt-4 text-xs leading-5 text-slate-500">Available points can be redeemed. Lifetime points never decrease and continue to represent historical verified participation.</p>
+        </Card>
+      </section>
 
       <Card variant="elevated" className="mb-4 !bg-eco-800 !text-white">
         <div className="flex gap-3">

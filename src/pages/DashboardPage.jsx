@@ -26,7 +26,7 @@ export default function DashboardPage() {
       </Link>
 
       <div className="mb-5">
-        <DailyQuestCard detail="Verify 2 clean plastic items" progress={Math.min(stats.verifiedItems % 3, 2)} total={2} reward="+20 leaf points" icon={Target} />
+        <DailyQuestCard detail="Verify 2 clean plastic items" progress={Math.min(stats.verifiedItems % 3, 2)} total={2} reward="Material points + visit bonus" icon={Target} />
       </div>
 
       <Card variant="elevated" className="mb-5 overflow-hidden p-0">

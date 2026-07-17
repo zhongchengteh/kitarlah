@@ -11,7 +11,7 @@ export default function LocationsPage() {
     <div className="animate-rise">
       <PageHeader eyebrow="Recovery map" title="Choose your next stop" description="Discover plastic-only collection points and complete local recovery routes." />
 
-      <div className="mb-4"><DailyQuestCard title="Location quest" detail="Visit a QR-enabled recovery booth" progress={0} total={1} reward="+15 leaf points" icon={Flag} /></div>
+      <div className="mb-4"><DailyQuestCard title="Location quest" detail="Visit a QR-enabled recovery booth" progress={0} total={1} reward="5-point bonus after approval" icon={Flag} /></div>
 
       <Card variant="tinted" className="mb-4">
         <div className="flex gap-3">

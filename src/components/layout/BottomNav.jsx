@@ -18,6 +18,7 @@ export default function BottomNav({ items = memberNavItems }) {
           <NavLink
             key={item.to}
             to={item.to}
+            end
             className={({ isActive }) =>
               cn(
                 "flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg text-[0.68rem] font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-eco-500",

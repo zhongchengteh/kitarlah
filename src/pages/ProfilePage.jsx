@@ -25,12 +25,12 @@ export default function ProfilePage() {
           </div>
         </div>
         <div className="mt-5">
-          <ProgressBar value={stats.points} max={stats.nextReward} label="Passport level progress" tone="light" />
+          <ProgressBar value={stats.lifetimePoints} max={stats.nextReward} label="Lifetime progress" tone="light" />
         </div>
       </Card>
 
       <div className="grid grid-cols-2 gap-3">
-        <StatCard icon={Award} label="Total points" value={stats.points} helper="Reward balance" />
+        <StatCard icon={Award} label="Lifetime points" value={stats.lifetimePoints} helper={`${stats.availablePoints} available`} />
         <StatCard icon={QrCode} label="Verified scans" value={stats.scans} tone="sky" helper="Plastic entries" />
         <StatCard icon={Flame} label="Streak" value={`${stats.streak} days`} tone="amber" helper="Recycling habit" />
         <StatCard icon={Scale} label="Plastic diverted" value={`${stats.recycledWeightKg} kg`} tone="rose" helper="Estimated weight" />
