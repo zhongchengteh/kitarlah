@@ -1,8 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from "lucide-react";
 import * as THREE from "three";
 
 const clamp = (value, minimum, maximum) => Math.min(maximum, Math.max(minimum, value));
+
+function getCameraFit(width) {
+  if (width < 360) return { zoom: 6.45, fov: 42 };
+  if (width < 440) return { zoom: 6.15, fov: 40 };
+  return { zoom: 4.95, fov: 36 };
+}
 
 function makeMaterial(color, options = {}) {
   return new THREE.MeshStandardMaterial({ color, roughness: 0.78, ...options });
@@ -82,26 +87,15 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
   const mountRef = useRef(null);
   const sceneRef = useRef(null);
   const [webglAvailable, setWebglAvailable] = useState(true);
-  const [zoom, setZoom] = useState(4.65);
-  const [pan, setPan] = useState(0);
   const recovery = getStage(verifiedItems, goalItems);
   const worldStage = stage || recovery.label;
 
   const adjustZoom = (amount) => {
     const current = sceneRef.current;
     if (!current) return;
-    const nextZoom = clamp(current.targetZoom + amount, 3.55, 6.1);
+    const nextZoom = clamp(current.targetZoom + amount, 3.75, 7.2);
     current.targetZoom = nextZoom;
     current.userAdjustedZoom = true;
-    setZoom(nextZoom);
-  };
-
-  const adjustPan = (amount) => {
-    const current = sceneRef.current;
-    if (!current) return;
-    const nextPan = clamp(current.targetPan + amount, -0.55, 0.55);
-    current.targetPan = nextPan;
-    setPan(nextPan);
   };
 
   useEffect(() => {
@@ -118,10 +112,11 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color("#f6fbf5");
-    const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 100);
-    const initialZoom = mount.clientWidth < 380 ? 5.45 : mount.clientWidth < 440 ? 5.15 : 4.85;
+    const initialFit = getCameraFit(mount.clientWidth);
+    const camera = new THREE.PerspectiveCamera(initialFit.fov, 1, 0.1, 100);
+    const initialZoom = initialFit.zoom;
     camera.position.set(0, initialZoom * 0.409, initialZoom);
-    camera.lookAt(0, 0.22, 0);
+    camera.lookAt(0, 0.36, 0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     mount.appendChild(renderer.domElement);
@@ -138,7 +133,8 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
     const soil = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.22, 0.36, 36), makeMaterial("#4a5b3b"));
     soil.position.y = -0.14;
     world.add(soil);
-    const ground = new THREE.Mesh(new THREE.CylinderGeometry(1.46, 1.46, 0.12, 36), makeMaterial("#83c96b"));
+    const groundMaterial = makeMaterial("#83c96b");
+    const ground = new THREE.Mesh(new THREE.CylinderGeometry(1.46, 1.46, 0.12, 36), groundMaterial);
     ground.position.y = 0.05;
     world.add(ground);
     const waterMaterial = makeMaterial("#73c8cf", { roughness: 0.28, metalness: 0.1 });
@@ -170,18 +166,44 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
     scene.add(cloudA, cloudB);
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const interaction = { dragging: false, lastX: 0, targetRotation: 0 };
+    const pointers = new Map();
+    const interaction = { dragging: false, lastX: 0, lastY: 0, lastPinchDistance: null, targetRotation: 0, targetTilt: 0 };
     const onPointerDown = (event) => {
+      event.preventDefault();
+      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
       interaction.dragging = true;
       interaction.lastX = event.clientX;
+      interaction.lastY = event.clientY;
       renderer.domElement.setPointerCapture?.(event.pointerId);
     };
     const onPointerMove = (event) => {
-      if (!interaction.dragging) return;
+      if (!pointers.has(event.pointerId)) return;
+      event.preventDefault();
+      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      if (pointers.size >= 2) {
+        const [first, second] = [...pointers.values()];
+        const distance = Math.hypot(second.x - first.x, second.y - first.y);
+        if (interaction.lastPinchDistance !== null) adjustZoom((interaction.lastPinchDistance - distance) * 0.012);
+        interaction.lastPinchDistance = distance;
+        interaction.dragging = false;
+        return;
+      }
+      interaction.dragging = true;
       interaction.targetRotation += (event.clientX - interaction.lastX) * 0.012;
+      interaction.targetTilt = clamp(interaction.targetTilt + (event.clientY - interaction.lastY) * 0.006, -0.18, 0.24);
       interaction.lastX = event.clientX;
+      interaction.lastY = event.clientY;
     };
-    const onPointerUp = () => { interaction.dragging = false; };
+    const onPointerUp = (event) => {
+      pointers.delete(event.pointerId);
+      interaction.lastPinchDistance = null;
+      interaction.dragging = pointers.size === 1;
+      const remaining = pointers.values().next().value;
+      if (remaining) {
+        interaction.lastX = remaining.x;
+        interaction.lastY = remaining.y;
+      }
+    };
     const onWheel = (event) => {
       event.preventDefault();
       adjustZoom(event.deltaY * 0.003);
@@ -192,19 +214,35 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
     renderer.domElement.addEventListener("pointercancel", onPointerUp);
     renderer.domElement.addEventListener("wheel", onWheel, { passive: false });
 
-    sceneRef.current = { camera, world, trees, plants, plastic, beacon, waterMaterial, targetZoom: initialZoom, targetPan: 0, userAdjustedZoom: false, renderedItems: verifiedItems, recovery: recovery.progress };
+    sceneRef.current = {
+      camera,
+      world,
+      trees,
+      plants,
+      plastic,
+      beacon,
+      groundMaterial,
+      waterMaterial,
+      targetGroundColor: new THREE.Color("#83c96b"),
+      targetWaterColor: new THREE.Color("#73c8cf"),
+      targetSkyColor: new THREE.Color("#f6fbf5"),
+      targetZoom: initialZoom,
+      userAdjustedZoom: false,
+      renderedItems: verifiedItems,
+      recovery: recovery.progress,
+    };
 
     const resize = () => {
       const width = Math.max(mount.clientWidth, 1);
       const height = Math.max(mount.clientHeight, 1);
+      const fittedCamera = getCameraFit(width);
       camera.aspect = width / height;
+      camera.fov = fittedCamera.fov;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height, false);
       const current = sceneRef.current;
       if (current && !current.userAdjustedZoom) {
-        const fittedZoom = width < 380 ? 5.45 : width < 440 ? 5.15 : 4.85;
-        current.targetZoom = fittedZoom;
-        setZoom(fittedZoom);
+        current.targetZoom = fittedCamera.zoom;
       }
     };
     const resizeObserver = new ResizeObserver(resize);
@@ -216,15 +254,20 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
       const current = sceneRef.current;
       if (current) {
         world.rotation.y += (interaction.targetRotation - world.rotation.y) * 0.08;
-        if (!reducedMotion && !interaction.dragging) interaction.targetRotation += 0.0016;
+        world.rotation.x += (interaction.targetTilt - world.rotation.x) * 0.08;
+        if (!reducedMotion && pointers.size === 0) interaction.targetRotation += 0.0016;
         camera.position.z += (current.targetZoom - camera.position.z) * 0.12;
         camera.position.y = camera.position.z * 0.409;
-        camera.lookAt(current.targetPan, 0.22, 0);
+        camera.lookAt(0, 0.36, 0);
         if (!reducedMotion) {
           world.position.y = worldBaseY + Math.sin(time * 0.0011) * 0.045;
           cloudA.position.x = -1.08 + Math.sin(time * 0.00045) * 0.07;
           cloudB.position.x = 1.02 + Math.cos(time * 0.0004) * 0.05;
+          current.beacon.rotation.y += 0.004 + current.recovery * 0.003;
         }
+        current.groundMaterial.color.lerp(current.targetGroundColor, 0.035);
+        current.waterMaterial.color.lerp(current.targetWaterColor, 0.035);
+        scene.background.lerp(current.targetSkyColor, 0.025);
         current.trees.forEach((tree) => {
           const nextScale = tree.userData.targetScale ?? 1;
           tree.scale.x += (nextScale - tree.scale.x) * 0.08;
@@ -237,6 +280,12 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
           item.scale.y += (nextScale - item.scale.y) * 0.09;
           item.scale.z += (nextScale - item.scale.z) * 0.09;
           if (nextScale < 0.03 && item.scale.x < 0.035) item.visible = false;
+        });
+        [current.plants, current.beacon].forEach((item) => {
+          const nextScale = item.userData.targetScale ?? 1;
+          item.scale.x += (nextScale - item.scale.x) * 0.07;
+          item.scale.y += (nextScale - item.scale.y) * 0.07;
+          item.scale.z += (nextScale - item.scale.z) * 0.07;
         });
         renderer.render(scene, camera);
       }
@@ -280,9 +329,17 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
       tree.userData.targetScale = showTree ? 1 : 0.01;
       if (!hasNewVerifiedItem) tree.scale.setScalar(showTree ? 1 : 0.01);
     });
-        current.plants.scale.setScalar(0.35 + progress * 0.65);
-    current.beacon.scale.setScalar(0.55 + progress * 0.45);
-    current.waterMaterial.color.set(progress >= 0.65 ? "#53c8d4" : progress >= 0.35 ? "#6bb7c2" : "#84a8ad");
+    const plantScale = 0.3 + progress * 0.7;
+    const beaconScale = 0.5 + progress * 0.55;
+    current.plants.userData.targetScale = plantScale;
+    current.beacon.userData.targetScale = beaconScale;
+    if (!hasNewVerifiedItem) {
+      current.plants.scale.setScalar(plantScale);
+      current.beacon.scale.setScalar(beaconScale);
+    }
+    current.targetGroundColor.set(progress >= 1 ? "#72d56b" : progress >= 0.65 ? "#79c96a" : progress >= 0.35 ? "#8fbd70" : "#9b9e74");
+    current.targetWaterColor.set(progress >= 1 ? "#42cfdf" : progress >= 0.65 ? "#53c8d4" : progress >= 0.35 ? "#6bb7c2" : "#879da6");
+    current.targetSkyColor.set(progress >= 1 ? "#e9fff2" : progress >= 0.65 ? "#effcf3" : progress >= 0.35 ? "#f6fbf5" : "#f3f0e8");
     current.renderedItems = verifiedItems;
     current.recovery = progress;
   }, [verifiedItems, goalItems]);
@@ -293,15 +350,7 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
 
   return (
     <div className="relative">
-      <div ref={mountRef} className="h-[300px] w-full touch-pan-y overflow-hidden rounded-lg" aria-label={`Interactive motivational visualization: ${verifiedItems} of ${goalItems} verified plastic items, ${worldStage} stage. Drag to rotate. Use zoom controls to adjust the view.`} role="img" />
-      <div className="absolute inset-y-0 left-3 right-3 flex items-center justify-between" role="group" aria-label="Move recovery world left or right">
-        <button type="button" aria-label="Move recovery world left" title="Move left" onClick={() => adjustPan(0.18)} disabled={pan >= 0.55} className="grid size-10 place-items-center rounded-lg border border-eco-200 bg-white/95 text-eco-800 shadow-soft transition hover:bg-eco-50 disabled:cursor-not-allowed disabled:text-slate-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-eco-500"><ChevronLeft className="size-5" /></button>
-        <button type="button" aria-label="Move recovery world right" title="Move right" onClick={() => adjustPan(-0.18)} disabled={pan <= -0.55} className="grid size-10 place-items-center rounded-lg border border-eco-200 bg-white/95 text-eco-800 shadow-soft transition hover:bg-eco-50 disabled:cursor-not-allowed disabled:text-slate-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-eco-500"><ChevronRight className="size-5" /></button>
-      </div>
-      <div className="absolute bottom-3 right-3 flex overflow-hidden rounded-lg border border-eco-200 bg-white/95 shadow-soft" role="group" aria-label="Adjust recovery world zoom">
-        <button type="button" aria-label="Zoom out" title="Zoom out" onClick={() => adjustZoom(0.45)} disabled={zoom >= 6.1} className="grid size-10 place-items-center border-r border-eco-100 text-eco-800 transition hover:bg-eco-50 disabled:cursor-not-allowed disabled:text-slate-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-eco-500"><ZoomOut className="size-4" /></button>
-        <button type="button" aria-label="Zoom in" title="Zoom in" onClick={() => adjustZoom(-0.45)} disabled={zoom <= 3.55} className="grid size-10 place-items-center text-eco-800 transition hover:bg-eco-50 disabled:cursor-not-allowed disabled:text-slate-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-eco-500"><ZoomIn className="size-4" /></button>
-      </div>
+      <div ref={mountRef} className="h-[300px] w-full touch-none cursor-grab overflow-hidden rounded-lg active:cursor-grabbing" aria-label={`Interactive motivational visualization: ${verifiedItems} of ${goalItems} verified plastic items, ${worldStage} stage. Drag to rotate the world and pinch with two fingers to zoom.`} role="img" />
       <p className="sr-only">A motivational visualization only. It does not represent an exact measurement of real-world environmental impact.</p>
     </div>
   );
