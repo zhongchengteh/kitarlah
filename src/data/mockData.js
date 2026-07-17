@@ -99,7 +99,7 @@ export const peopleLeaderboard = {
     { rank: 1, name: "Aina Rahman", initials: "AR", booth: "Pavilion Bukit Jalil", entries: 48, weight: 7.4, points: 540, color: "bg-rose-100 text-rose-800" },
     { rank: 2, name: "Jason Lim", initials: "JL", booth: "APU Campus", entries: 43, weight: 6.8, points: 490, color: "bg-sky-100 text-sky-800" },
     { rank: 3, name: "Mei Tan", initials: "MT", booth: "Bukit Jalil Park", entries: 39, weight: 6.1, points: 450, color: "bg-amber-100 text-amber-800" },
-    { rank: 4, name: "Alex Tan", initials: "AT", booth: "APU Campus", entries: 12, weight: 3.8, points: 120, avatar: "alex-profile.avif", isCurrentUser: true },
+    { rank: 4, name: "Nick", initials: "N", booth: "APU Campus", entries: 12, weight: 3.8, points: 120, avatar: "alex-profile.avif", isCurrentUser: true },
     { rank: 5, name: "Priya Kumar", initials: "PK", booth: "Pavilion Bukit Jalil", entries: 11, weight: 2.2, points: 110, color: "bg-violet-100 text-violet-800" },
   ],
   month: [
@@ -107,7 +107,7 @@ export const peopleLeaderboard = {
     { rank: 2, name: "Aina Rahman", initials: "AR", booth: "Pavilion Bukit Jalil", entries: 168, weight: 26.4, points: 1880, color: "bg-rose-100 text-rose-800" },
     { rank: 3, name: "Mei Tan", initials: "MT", booth: "Bukit Jalil Park", entries: 151, weight: 23.9, points: 1690, color: "bg-amber-100 text-amber-800" },
     { rank: 4, name: "Priya Kumar", initials: "PK", booth: "Pavilion Bukit Jalil", entries: 104, weight: 17.1, points: 1210, color: "bg-violet-100 text-violet-800" },
-    { rank: 5, name: "Alex Tan", initials: "AT", booth: "APU Campus", entries: 62, weight: 11.8, points: 720, avatar: "alex-profile.avif", isCurrentUser: true },
+    { rank: 5, name: "Nick", initials: "N", booth: "APU Campus", entries: 62, weight: 11.8, points: 720, avatar: "alex-profile.avif", isCurrentUser: true },
   ],
 };
 
@@ -137,6 +137,22 @@ export const activeUsers = [
   { name: "Jason Lim", scans: 37 },
   { name: "Mei Tan", scans: 33 },
   { name: "Farhan Lee", scans: 28 },
+];
+
+export const adminWeeklyRecovery = [
+  { day: "Mon", entries: 86, weight: 12.4 },
+  { day: "Tue", entries: 112, weight: 18.1 },
+  { day: "Wed", entries: 94, weight: 15.6 },
+  { day: "Thu", entries: 148, weight: 24.2 },
+  { day: "Fri", entries: 132, weight: 21.7 },
+  { day: "Sat", entries: 176, weight: 29.8 },
+  { day: "Sun", entries: 158, weight: 26.4 },
+];
+
+export const adminLocationPerformance = [
+  { name: "Pavilion Bukit Jalil", entries: 648, weight: 147.2, participants: 238, engagement: 92 },
+  { name: "APU Campus", entries: 692, weight: 158.4, participants: 214, engagement: 86 },
+  { name: "Bukit Jalil Park", entries: 401, weight: 110.3, participants: 156, engagement: 68 },
 ];
 
 export const achievements = [

@@ -26,13 +26,12 @@ export default function AppShell() {
               onClick={() => setProfileOpen((open) => !open)}
               className="rounded-full transition hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-eco-500"
             >
-              <ProfileAvatar src={`${baseUrl}alex-profile.avif`} name="Alex Tan" className="size-11" />
+              <ProfileAvatar src={`${baseUrl}alex-profile.avif`} name="Nick" className="size-11" />
             </button>
             {profileOpen ? (
               <div className="absolute right-0 top-12 w-56 animate-rise rounded-lg bg-white p-2 shadow-lift ring-1 ring-eco-100">
                 <div className="border-b border-slate-100 px-3 py-2">
-                  <p className="text-sm font-black text-slate-950">Alex Tan</p>
-                  <p className="text-xs font-semibold text-slate-500">Plastic recovery member</p>
+                  <p className="text-sm font-black text-slate-950">Nick</p>
                 </div>
                 <Link
                   to="/app/profile"

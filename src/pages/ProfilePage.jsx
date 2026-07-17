@@ -18,10 +18,9 @@ export default function ProfilePage() {
 
       <Card variant="elevated" className="mb-4 !bg-eco-800 !text-white">
         <div className="flex items-center gap-3">
-          <ProfileAvatar src={`${baseUrl}alex-profile.avif`} name="Alex Tan" className="size-16" />
+          <ProfileAvatar src={`${baseUrl}alex-profile.avif`} name="Nick" className="size-16" />
           <div>
-            <h2 className="text-xl font-black">Alex Tan</h2>
-            <p className="text-sm text-eco-100">Plastic recovery member</p>
+            <h2 className="text-xl font-black">Nick</h2>
             <Badge className="mt-2 bg-white/15 text-white"><Sparkles className="mr-1 size-3" /> Green Starter</Badge>
           </div>
         </div>

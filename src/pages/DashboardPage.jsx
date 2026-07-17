@@ -19,7 +19,7 @@ export default function DashboardPage() {
 
   return (
     <div className="animate-rise">
-      <PageHeader eyebrow="Home" title="Hi, Alex" description="Recycle plastic correctly and watch your community recover." />
+      <PageHeader eyebrow="Home" title="Hi, Nick" description="Recycle plastic correctly and watch your community recover." />
 
       <Link to="/app/scan" className="mb-5 block">
         <Button className="w-full shadow-soft" size="lg"><QrCode className="size-5" /> Start a recovery scan <Sparkles className="size-4" /></Button>

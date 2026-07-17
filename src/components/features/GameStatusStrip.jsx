@@ -1,10 +1,22 @@
 import { Flame, Leaf, Sparkles } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useEcoCycle } from "../../context/EcoCycleContext.jsx";
 
 export default function GameStatusStrip() {
   const { stats } = useEcoCycle();
+  const previousPoints = useRef(stats.points);
+  const [pointGain, setPointGain] = useState(0);
   const level = Math.max(1, Math.ceil(stats.verifiedItems / 5));
   const progress = ((stats.verifiedItems % 5) / 5) * 100;
+
+  useEffect(() => {
+    const gain = stats.points - previousPoints.current;
+    previousPoints.current = stats.points;
+    if (gain <= 0) return undefined;
+    setPointGain(gain);
+    const timer = window.setTimeout(() => setPointGain(0), 1400);
+    return () => window.clearTimeout(timer);
+  }, [stats.points]);
 
   return (
     <div className="border-b border-eco-100 bg-eco-50 px-4 py-2">
@@ -22,7 +34,7 @@ export default function GameStatusStrip() {
           </div>
         </div>
         <span className="flex shrink-0 items-center gap-1 text-xs font-black text-amber-700"><Flame className="size-3.5" /> {stats.streak}</span>
-        <span className="flex shrink-0 items-center gap-1 text-xs font-black text-eco-800"><Sparkles className="size-3.5" /> {stats.points}</span>
+        <span className={`relative flex shrink-0 items-center gap-1 text-xs font-black text-eco-800 ${pointGain ? "score-total-pop" : ""}`}><Sparkles className="size-3.5" /> {stats.points}{pointGain ? <span className="score-gain-float absolute -top-5 right-0 text-xs text-amber-700">+{pointGain}</span> : null}</span>
       </div>
     </div>
   );

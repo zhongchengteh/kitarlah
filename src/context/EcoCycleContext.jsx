@@ -19,7 +19,7 @@ export function EcoCycleProvider({ children }) {
     setUsedSessions((current) => [...current, sessionId]);
     setStats((current) => ({ ...current, points: current.points + points, scans: current.scans + 1, verifiedItems: Math.min(current.goalItems, current.verifiedItems + quantity), recycledWeightKg: Number((current.recycledWeightKg + weight).toFixed(2)) }));
     setActivities((current) => [activity, ...current].slice(0, 5));
-    setToast({ title: "Plastic entry verified", message: "One piece of litter was cleared from your recovery world." });
+    setToast({ title: `+${points} leaf points earned`, message: "Verified entry complete. Your recovery world has changed." });
     return { ok: true, activity };
   };
 

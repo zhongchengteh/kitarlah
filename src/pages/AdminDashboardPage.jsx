@@ -4,9 +4,13 @@ import StatCard from "../components/features/StatCard.jsx";
 import Badge from "../components/ui/Badge.jsx";
 import Button from "../components/ui/Button.jsx";
 import Card from "../components/ui/Card.jsx";
-import { activeUsers, adminMetrics, campaignPerformance } from "../data/mockData.js";
+import { activeUsers, adminLocationPerformance, adminMetrics, adminWeeklyRecovery, campaignPerformance } from "../data/mockData.js";
 
 export default function AdminDashboardPage() {
+  const maxEntries = Math.max(...adminWeeklyRecovery.map((day) => day.entries));
+  const weeklyEntries = adminWeeklyRecovery.reduce((total, day) => total + day.entries, 0);
+  const weeklyWeight = adminWeeklyRecovery.reduce((total, day) => total + day.weight, 0).toFixed(1);
+
   return (
     <div className="animate-rise">
       <PageHeader
@@ -34,15 +38,30 @@ export default function AdminDashboardPage() {
       <section className="mt-5">
         <h2 className="mb-3 text-lg font-black text-slate-950">Weekly verified plastic entries</h2>
         <Card variant="elevated">
-          <div className="flex h-40 items-end gap-2">
-            {[38, 52, 44, 70, 62, 84, 76].map((height, index) => (
-              <div key={index} className="flex flex-1 flex-col items-center gap-2">
-                <div className="w-full rounded-t-lg bg-eco-600 transition hover:bg-eco-700" style={{ height: `${height}%` }} />
-                <span className="text-[0.65rem] font-bold text-slate-400">{["M", "T", "W", "T", "F", "S", "S"][index]}</span>
+          <div className="mb-4 flex items-center justify-between gap-3 text-xs font-bold"><span className="text-eco-800">{weeklyEntries} verified entries</span><span className="text-slate-500">{weeklyWeight} kg estimated</span></div>
+          <div className="flex h-44 items-end gap-2">
+            {adminWeeklyRecovery.map((day) => (
+              <div key={day.day} className="flex h-full flex-1 flex-col items-center justify-end gap-2">
+                <span className="text-[0.62rem] font-black text-eco-800">{day.entries}</span>
+                <div className="w-full rounded-t-lg bg-eco-600 transition-all duration-500 hover:bg-eco-700" style={{ height: `${Math.max((day.entries / maxEntries) * 100, 12)}%` }} />
+                <span className="text-[0.65rem] font-bold text-slate-400">{day.day.slice(0, 1)}</span>
               </div>
             ))}
           </div>
         </Card>
+      </section>
+
+      <section className="mt-5">
+        <h2 className="mb-3 text-lg font-black text-slate-950">Location performance</h2>
+        <div className="grid gap-3">
+          {adminLocationPerformance.map((location) => (
+            <Card key={location.name}>
+              <div className="flex items-center justify-between gap-3"><p className="min-w-0 truncate font-black text-slate-950">{location.name}</p><Badge variant="success">{location.engagement}% active</Badge></div>
+              <div className="mt-3 h-2 overflow-hidden rounded-full bg-eco-100"><div className="h-full rounded-full bg-eco-600" style={{ width: `${location.engagement}%` }} /></div>
+              <div className="mt-3 grid grid-cols-3 gap-2 text-center"><div><p className="font-black text-slate-950">{location.entries}</p><p className="text-[0.65rem] font-semibold text-slate-500">Entries</p></div><div><p className="font-black text-slate-950">{location.weight} kg</p><p className="text-[0.65rem] font-semibold text-slate-500">Estimated</p></div><div><p className="font-black text-slate-950">{location.participants}</p><p className="text-[0.65rem] font-semibold text-slate-500">People</p></div></div>
+            </Card>
+          ))}
+        </div>
       </section>
 
       <section className="mt-5">

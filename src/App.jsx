@@ -32,6 +32,10 @@ export default function App() {
       </Route>
       <Route element={<AdminShell />}>
         <Route path="/admin" element={<AdminDashboardPage />} />
+        <Route path="/admin/scan" element={<ScanPage />} />
+        <Route path="/admin/rewards" element={<RewardsPage />} />
+        <Route path="/admin/locations" element={<LocationsPage />} />
+        <Route path="/admin/leaderboard" element={<LeaderboardPage />} />
       </Route>
       <Route path="*" element={<LandingPage />} />
     </Routes>

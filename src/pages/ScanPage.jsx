@@ -7,6 +7,7 @@ import Card from "../components/ui/Card.jsx";
 import InputField from "../components/ui/InputField.jsx";
 import Modal from "../components/ui/Modal.jsx";
 import { useEcoCycle } from "../context/EcoCycleContext.jsx";
+import ScoreBurst from "../components/features/ScoreBurst.jsx";
 
 const sessionId = () => `BIN-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
 
@@ -92,7 +93,7 @@ export default function ScanPage() {
       </Card> : null}
 
       <Card variant="tinted" className="mt-4"><p className="text-sm leading-6 text-eco-950">Empty, rinse and dry the container. Check the plastic resin/type accepted by this location. This is prototype validation, not production-grade fraud prevention.</p></Card>
-      <Modal open={success} title="Mission complete!" actionLabel="See recovery world" onClose={() => setSuccess(false)}>Your plastic entry is verified. Your recovery world has changed, and you earned a small leaf-point bonus. You now have {stats.verifiedItems} verified plastic items.</Modal>
+      <Modal open={success} title="Mission complete!" actionLabel="See recovery world" onClose={() => setSuccess(false)}><ScoreBurst points={Math.max(Number(form.quantity) || 1, 1) * 10} />Your plastic entry is verified and your recovery world has changed. You now have {stats.verifiedItems} verified plastic items.</Modal>
     </div>
   );
 }

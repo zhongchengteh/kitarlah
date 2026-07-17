@@ -119,6 +119,9 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
     camera.lookAt(0, 0.36, 0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.domElement.style.display = "block";
+    renderer.domElement.style.width = "100%";
+    renderer.domElement.style.height = "100%";
     mount.appendChild(renderer.domElement);
 
     scene.add(new THREE.HemisphereLight("#fffdf5", "#5b8f55", 2.1));
@@ -198,6 +201,7 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
       pointers.delete(event.pointerId);
       interaction.lastPinchDistance = null;
       interaction.dragging = pointers.size === 1;
+      if (pointers.size === 0) interaction.targetTilt = 0;
       const remaining = pointers.values().next().value;
       if (remaining) {
         interaction.lastX = remaining.x;
@@ -239,7 +243,7 @@ export default function PlasticRecoveryWorld({ verifiedItems = 0, goalItems = 20
       camera.aspect = width / height;
       camera.fov = fittedCamera.fov;
       camera.updateProjectionMatrix();
-      renderer.setSize(width, height, false);
+      renderer.setSize(width, height, true);
       const current = sceneRef.current;
       if (current && !current.userAdjustedZoom) {
         current.targetZoom = fittedCamera.zoom;
